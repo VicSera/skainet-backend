@@ -31,6 +31,16 @@ class TripController (
         return null
     }
 
+    @GetMapping(path = ["/users/{username}/other-trips"])
+    fun getAllTripsNotDrivenByUser(@PathVariable username : String) : Iterable<Trip>? {
+        val userId : UUID? = userService.getIdFromUsername(username)
+
+        if (userId != null)
+            return tripService.findTripsNotDrivenBy(userId)
+
+        return null
+    }
+
     @GetMapping(path = ["/trips/{tripId}"])
     fun getTripById(@PathVariable tripId: UUID) : ResponseEntity<Trip> {
         val trip = tripService.getTrip(tripId)

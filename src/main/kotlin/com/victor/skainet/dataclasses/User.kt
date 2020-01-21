@@ -1,14 +1,37 @@
 package com.victor.skainet.dataclasses
 
-import org.hibernate.annotations.Type
+import org.hibernate.annotations.GenericGenerator
 import java.util.*
 import javax.persistence.*
 
 @Entity
+@Table(name = "user")
 data class User (
         @Id
         @Column(length = 16)
+        @GeneratedValue(generator = "UUID")
+        @GenericGenerator(
+                name = "UUID",
+                strategy = "org.hibernate.id.UUIDGenerator"
+        )
         override val id: UUID = UUID.randomUUID(),
+
+        @OneToMany(
+                mappedBy = "driver",
+                cascade = [CascadeType.ALL],
+                orphanRemoval = true
+        )
+        val drivenTrips: MutableList<Trip> = emptyList<Trip>().toMutableList(),
+
+//        @OneToMany(
+//                mappedBy = "participation",
+//                cascade = [CascadeType.ALL],
+//                orphanRemoval = true
+//        )
+//        val trips : List<Trip> = emptyList(),
+
+//        @ManyToMany(mappedBy = "participants")
+//        val trips : List<Trip> = emptyList(),
 
         @Column(nullable = false)
         var firstName: String = "",
@@ -27,4 +50,15 @@ data class User (
 
         @Column(nullable = true)
         var usualLocation: String = ""
-        ) : SkaiObject
+        ) : SkaiObject {
+
+        fun addDrivenTrip(trip: Trip) {
+                drivenTrips.add(trip)
+                trip.driver = this
+        }
+
+        fun removeDrivenTrip(trip: Trip) {
+                drivenTrips.remove(trip)
+                trip.driver = null
+        }
+}

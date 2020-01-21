@@ -10,6 +10,6 @@ import java.util.*
 interface TripRepository : CrudRepository<Trip, UUID> {
     fun findAllByDriverId(driverId : UUID) : Iterable<Trip>
 
-    @Query(value = "select trip from Trip trip where trip.driverId <> :driverId")
+    @Query(value = "select trip from Trip trip where trip.driver.id <> :driverId")
     fun findAllExcludingDriverId(driverId : UUID) : Iterable<Trip>
 }

@@ -13,19 +13,15 @@ class TripService(
         @Autowired private val repository : TripRepository
 ) {
     init {
-
-//        repository.add(Trip(UUID.randomUUID(), UUID.fromString("a0102fb1-413a-4131-8ff8-fbdb51034255"), Date(),
-//                maxPassengers = 5, location = "Gara", comment = "No comment", go = true))
-//        repository.add(Trip(UUID.randomUUID(), UUID.fromString("a0102fb1-413a-4131-8ff8-fbdb51034255"), Date(),
-//                maxPassengers = 2, location = "Taietura", comment = "No comment", go = false))
-//        repository.add(Trip(UUID.randomUUID(), UUID.fromString("a0102fb1-413a-4131-8ff8-fbdb51034255"), Date(),
-//                maxPassengers = 1, location = "Floresti", comment = "No comment", go = true))
-
         println(repository.findAll())
     }
 
     fun findAll() : Iterable<Trip> {
         return repository.findAll()
+    }
+
+    fun findTripsNotDrivenBy(userId : UUID) : Iterable<Trip> {
+        return repository.findAllExcludingDriverId(userId)
     }
 
     fun findForUser(userId : UUID) : Iterable<Trip> {

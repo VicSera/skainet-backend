@@ -1,19 +1,38 @@
 package com.victor.skainet.dataclasses
 
+import org.hibernate.annotations.GenericGenerator
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
+@Table(name = "trip")
 data class Trip(
         @Id
         @Column(length = 16)
+        @GeneratedValue(generator = "UUID")
+        @GenericGenerator(
+                name = "UUID",
+                strategy = "org.hibernate.id.UUIDGenerator"
+        )
         override val id: UUID = UUID.randomUUID(),
 
-        @Column(nullable = false)
-        val driverId: UUID = UUID.randomUUID(),
+        @ManyToOne(fetch = FetchType.LAZY)
+        var driver: User? = User(),
+
+//        @OneToMany(
+//                mappedBy = "participation",
+//                cascade = [CascadeType.ALL],
+//                orphanRemoval = true
+//        )
+//        val participants : List<User> = emptyList(),
+
+//        @ManyToMany
+//        @JoinTable(
+//                name = "trip_user",
+//                joinColumns = [JoinColumn(name = "trip_id")],
+//                inverseJoinColumns = [JoinColumn(name = "user_id")]
+//        )
+//        val participants : List<User> = emptyList(),
 
         @Column(nullable = false)
         var date: Date = Date(),
@@ -29,4 +48,15 @@ data class Trip(
 
         @Column(nullable = false)
         var go: Boolean = true
-): SkaiObject
+): SkaiObject {
+
+        override fun equals(other: Any?): Boolean {
+                if (other is Trip)
+                        return other.id == this.id
+                return false
+        }
+
+        override fun hashCode(): Int {
+                return 31
+        }
+}
