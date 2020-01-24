@@ -19,20 +19,10 @@ data class Trip(
         @ManyToOne(fetch = FetchType.LAZY)
         var driver: User? = User(),
 
-//        @OneToMany(
-//                mappedBy = "participation",
-//                cascade = [CascadeType.ALL],
-//                orphanRemoval = true
-//        )
-//        val participants : List<User> = emptyList(),
-
-//        @ManyToMany
-//        @JoinTable(
-//                name = "trip_user",
-//                joinColumns = [JoinColumn(name = "trip_id")],
-//                inverseJoinColumns = [JoinColumn(name = "user_id")]
-//        )
-//        val participants : List<User> = emptyList(),
+        @OneToMany(
+                mappedBy = "trip"
+        )
+        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList(),
 
         @Column(nullable = false)
         var date: Date = Date(),

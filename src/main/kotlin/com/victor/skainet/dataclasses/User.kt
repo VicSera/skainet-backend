@@ -17,21 +17,9 @@ data class User (
         override val id: UUID = UUID.randomUUID(),
 
         @OneToMany(
-                mappedBy = "driver",
-                cascade = [CascadeType.ALL],
-                orphanRemoval = true
+                mappedBy = "user"
         )
-        val drivenTrips: MutableList<Trip> = emptyList<Trip>().toMutableList(),
-
-//        @OneToMany(
-//                mappedBy = "participation",
-//                cascade = [CascadeType.ALL],
-//                orphanRemoval = true
-//        )
-//        val trips : List<Trip> = emptyList(),
-
-//        @ManyToMany(mappedBy = "participants")
-//        val trips : List<Trip> = emptyList(),
+        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList(),
 
         @Column(nullable = false)
         var firstName: String = "",
@@ -50,15 +38,4 @@ data class User (
 
         @Column(nullable = true)
         var usualLocation: String = ""
-        ) : SkaiObject {
-
-        fun addDrivenTrip(trip: Trip) {
-                drivenTrips.add(trip)
-                trip.driver = this
-        }
-
-        fun removeDrivenTrip(trip: Trip) {
-                drivenTrips.remove(trip)
-                trip.driver = null
-        }
-}
+        ) : SkaiObject
