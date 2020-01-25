@@ -8,7 +8,7 @@ import javax.persistence.Embeddable
 @Embeddable
 class ParticipationKey (
         @Column(name = "user_id", length = 16)
-        val studentId : UUID = UUID.randomUUID(),
+        val userId : UUID = UUID.randomUUID(),
 
         @Column(name = "trip_id", length = 16)
         val tripId : UUID = UUID.randomUUID()

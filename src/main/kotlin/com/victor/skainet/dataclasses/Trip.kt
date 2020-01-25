@@ -39,6 +39,10 @@ data class Trip(
         )
         val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
 
+        fun addParticipation(participation: Participation) {
+                participationList.add(participation)
+        }
+
 //        override fun equals(other: Any?): Boolean {
 //                if (other is Trip)
 //                        return other.id == this.id

@@ -39,4 +39,8 @@ data class User (
                 mappedBy = "user"
         )
         val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
+
+        fun addParticipation(participation: Participation) {
+                participationList.add(participation)
+        }
 }
