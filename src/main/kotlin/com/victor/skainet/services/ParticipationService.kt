@@ -7,6 +7,7 @@ import com.victor.skainet.dataclasses.User
 import com.victor.skainet.repositories.ParticipationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class ParticipationService(
@@ -19,5 +20,13 @@ class ParticipationService(
         trip.addParticipation(participation)
 
         repository.save(participation)
+    }
+
+    fun getForUser(userId: UUID) : Iterable<Participation> {
+        return repository.findAllByUserId(userId)
+    }
+
+    fun getForTrip(tripId: UUID) : Iterable<Participation> {
+        return repository.findAllByTripId(tripId)
     }
 }
