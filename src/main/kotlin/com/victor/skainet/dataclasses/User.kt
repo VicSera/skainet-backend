@@ -7,20 +7,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "user")
 data class User (
-        @Id
-        @Column(length = 16)
-        @GeneratedValue(generator = "UUID")
-        @GenericGenerator(
-                name = "UUID",
-                strategy = "org.hibernate.id.UUIDGenerator"
-        )
-        override val id: UUID = UUID.randomUUID(),
-
-        @OneToMany(
-                mappedBy = "user"
-        )
-        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList(),
-
         @Column(nullable = false)
         var firstName: String = "",
 
@@ -38,4 +24,19 @@ data class User (
 
         @Column(nullable = true)
         var usualLocation: String = ""
-        ) : SkaiObject
+        ) : SkaiObject {
+
+        @Id
+        @Column(length = 16)
+        @GeneratedValue(generator = "UUID")
+        @GenericGenerator(
+                name = "UUID",
+                strategy = "org.hibernate.id.UUIDGenerator"
+        )
+        override val id: UUID = UUID.randomUUID()
+
+        @OneToMany(
+                mappedBy = "user"
+        )
+        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
+}
