@@ -1,6 +1,7 @@
 package com.victor.skainet.controllers
 
 import com.victor.skainet.dataclasses.Participation
+import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.services.ParticipationService
 import com.victor.skainet.services.TripService
 import com.victor.skainet.services.UserService
@@ -35,6 +36,14 @@ class ParticipationController (
 
         participationService.addParticipation(user, trip)
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/participations/{userId}/{tripId}"])
+    fun getParticipationStatus(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Status> {
+        val participation = participationService.getParticipation(userId, tripId)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        return ResponseEntity(participation.status, HttpStatus.OK)
     }
 
     @GetMapping(path = ["/participations/by-user/{userId}"])
