@@ -10,9 +10,9 @@ import java.util.*
 @Repository
 interface ParticipationRepository : CrudRepository<Participation, ParticipationKey> {
 
-    @Query(value = "select part from Participation part where part.participationKey.userId = :userId ")
+    @Query(value = "select part from Participation part where part.key.userId = :userId ")
     fun findAllByUserId(userId : UUID) : List<Participation>
 
-    @Query(value = "select part from Participation part where part.participationKey.tripId = :userId ")
+    @Query(value = "select part from Participation part where part.key.tripId = :tripId ")
     fun findAllByTripId(tripId : UUID) : List<Participation>
 }

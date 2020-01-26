@@ -20,6 +20,7 @@ class UserController @Autowired constructor(
 ){
     @GetMapping(path = ["/users"])
     fun getAllUsers() : Iterable<User> {
+        println(userService.getAllUsers())
         return userService.getAllUsers()
     }
 

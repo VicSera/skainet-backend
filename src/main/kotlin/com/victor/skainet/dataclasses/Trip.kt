@@ -34,14 +34,14 @@ data class Trip(
         @ManyToOne(fetch = FetchType.LAZY)
         var driver: User? = User()
 
-        @OneToMany(
-                mappedBy = "trip"
-        )
-        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
-
-        fun addParticipation(participation: Participation) {
-                participationList.add(participation)
-        }
+//        @OneToMany(
+//                mappedBy = "trip"
+//        )
+//        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
+//
+//        fun addParticipation(participation: Participation) {
+//                participationList.add(participation)
+//        }
 
 //        override fun equals(other: Any?): Boolean {
 //                if (other is Trip)

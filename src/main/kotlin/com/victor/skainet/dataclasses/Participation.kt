@@ -18,7 +18,7 @@ data class Participation(
         ) {
 
         @EmbeddedId
-        val participationKey: ParticipationKey = ParticipationKey(user.id, trip.id)
+        val key: ParticipationKey = ParticipationKey(user.id, trip.id)
 
         @Column
         var status: Status = Status.WAITING

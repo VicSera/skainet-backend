@@ -42,7 +42,7 @@ class ParticipationController (
         return participationService.getForUser(userId)
     }
 
-    @GetMapping(path = ["/by-trip/{tripId"])
+    @GetMapping(path = ["/by-trip/{tripId}"])
     fun getTripParticipationList(@PathVariable tripId: UUID) : Iterable<Participation> {
         return participationService.getForTrip(tripId)
     }
