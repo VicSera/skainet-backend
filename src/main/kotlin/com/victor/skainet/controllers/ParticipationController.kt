@@ -27,11 +27,11 @@ class ParticipationController (
         val user = userService.getUser(userId)
         val trip = tripService.getTrip(tripId)
 
-        println(user)
-        println(trip)
-
         if (user == null || trip == null)
             return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        if (participationService.getParticipation(userId, tripId) != null)
+            return ResponseEntity(HttpStatus.CONFLICT)
 
         participationService.addParticipation(user, trip)
         return ResponseEntity(HttpStatus.OK)
