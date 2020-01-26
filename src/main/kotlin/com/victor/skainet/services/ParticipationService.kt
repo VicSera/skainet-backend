@@ -47,4 +47,12 @@ class ParticipationService(
 
         repository.save(participation)
     }
+
+    fun deleteParticipation(userId: UUID, tripId: UUID) : Boolean {
+        val participation = repository.findById(ParticipationKey(userId, tripId)).orElse(null)
+                ?: return false
+
+        repository.delete(participation)
+        return true
+    }
 }

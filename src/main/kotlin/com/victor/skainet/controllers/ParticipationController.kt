@@ -64,4 +64,12 @@ class ParticipationController (
         participationService.declineParticipation(participation)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @DeleteMapping(path = ["/participations/{userId}/{tripId}"])
+    fun deleteParticipation(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Void> {
+        if (participationService.deleteParticipation(userId, tripId))
+            return ResponseEntity(HttpStatus.NO_CONTENT)
+
+        return ResponseEntity(HttpStatus.NOT_FOUND)
+    }
 }
