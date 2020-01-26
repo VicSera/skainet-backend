@@ -1,6 +1,5 @@
 package com.victor.skainet.dataclasses
 
-import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -22,4 +21,12 @@ data class Participation(
 
         @Column
         var status: Status = Status.WAITING
+
+        fun accept() {
+                status = Status.ACCEPTED
+        }
+
+        fun decline() {
+                status = Status.DECLINED
+        }
 }

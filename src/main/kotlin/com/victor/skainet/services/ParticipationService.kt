@@ -22,11 +22,29 @@ class ParticipationService(
         repository.save(participation)
     }
 
+    fun getParticipation(userId: UUID, tripId: UUID) : Participation? {
+        val key = ParticipationKey(userId, tripId)  // construct key to search for
+
+        return repository.findById(key).orElse(null)
+    }
+
     fun getForUser(userId: UUID) : Iterable<Participation> {
         return repository.findAllByUserId(userId)
     }
 
     fun getForTrip(tripId: UUID) : Iterable<Participation> {
         return repository.findAllByTripId(tripId)
+    }
+
+    fun acceptParticipation(participation: Participation) {
+        participation.accept()
+
+        repository.save(participation)
+    }
+
+    fun declineParticipation(participation: Participation) {
+        participation.decline()
+
+        repository.save(participation)
     }
 }

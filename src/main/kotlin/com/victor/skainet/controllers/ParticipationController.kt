@@ -22,7 +22,7 @@ class ParticipationController (
         @Autowired
         val tripService: TripService
 ) {
-    @PostMapping(path = ["/add-participation/{userId}/{tripId}"])
+    @PostMapping(path = ["/participations/{userId}/{tripId}"])
     fun addParticipation(@PathVariable userId : UUID, @PathVariable tripId : UUID) : ResponseEntity<Void> {
         val user = userService.getUser(userId)
         val trip = tripService.getTrip(tripId)
@@ -37,13 +37,31 @@ class ParticipationController (
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @GetMapping(path = ["/by-user/{userId}"])
+    @GetMapping(path = ["/participations/by-user/{userId}"])
     fun getUserParticipationList(@PathVariable userId: UUID) : Iterable<Participation> {
         return participationService.getForUser(userId)
     }
 
-    @GetMapping(path = ["/by-trip/{tripId}"])
+    @GetMapping(path = ["/participations/by-trip/{tripId}"])
     fun getTripParticipationList(@PathVariable tripId: UUID) : Iterable<Participation> {
         return participationService.getForTrip(tripId)
+    }
+
+    @PutMapping(path = ["/participations/{userId}/{tripId}/accept"])
+    fun acceptParticipation(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Void> {
+        val participation = participationService.getParticipation(userId, tripId)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)  // if participation not found, return 404
+
+        participationService.acceptParticipation(participation)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @PutMapping(path = ["/participations/{userId}/{tripId}/decline"])
+    fun declineParticipation(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Void> {
+        val participation = participationService.getParticipation(userId, tripId)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)  // if participation not found, return 404
+
+        participationService.declineParticipation(participation)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
