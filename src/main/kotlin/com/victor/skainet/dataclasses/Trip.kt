@@ -21,7 +21,7 @@ data class Trip(
 
         @Column(nullable = false)
         var go: Boolean = true
-): SkaiObject {
+) {
         @Id
         @Column(length = 16)
         @GeneratedValue(generator = "UUID")
@@ -29,7 +29,7 @@ data class Trip(
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
-        override val id: UUID = UUID.randomUUID()
+        val id: UUID = UUID.randomUUID()
 
         @ManyToOne(fetch = FetchType.LAZY)
         var driver: User? = User()

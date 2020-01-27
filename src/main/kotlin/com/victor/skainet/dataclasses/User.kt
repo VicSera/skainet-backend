@@ -24,7 +24,7 @@ data class User (
 
         @Column(nullable = true)
         var usualLocation: String = ""
-        ) : SkaiObject {
+        ) {
 
         @Id
         @Column(length = 16)
@@ -33,7 +33,7 @@ data class User (
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
-        override val id: UUID = UUID.randomUUID()
+        val id: UUID = UUID.randomUUID()
 
 //        @OneToMany(
 //                mappedBy = "user"
