@@ -1,13 +1,11 @@
 package com.victor.skainet.services
 
 import com.victor.skainet.dataclasses.User
-import com.victor.skainet.repositories.InMemoryUserRepository
 import com.victor.skainet.repositories.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.stereotype.Service
 import java.util.*
-import kotlin.NoSuchElementException
 
 @Service
 class UserService @Autowired constructor(
