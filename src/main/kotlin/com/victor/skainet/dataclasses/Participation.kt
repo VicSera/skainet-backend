@@ -1,14 +1,10 @@
 package com.victor.skainet.dataclasses
 
-import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "participation")
 data class Participation(
-        @EmbeddedId
-        val participationKey: ParticipationKey = ParticipationKey(),
-
         @ManyToOne
         @MapsId("user_id")
         @JoinColumn(name = "user_id")
@@ -17,10 +13,22 @@ data class Participation(
         @ManyToOne
         @MapsId("trip_id")
         @JoinColumn(name = "trip_id")
-        val trip: Trip = Trip(),
-
-        @Column
-        var status: Status = Status.WAITING
+        val trip: Trip = Trip()
         ) {
 
+        @EmbeddedId
+        val key: ParticipationKey = ParticipationKey(user.id, trip.id)
+
+        @Column
+        @Enumerated(EnumType.STRING)
+        var status: Status = Status.WAITING
+                private set
+
+        fun accept() {
+                status = Status.ACCEPTED
+        }
+
+        fun decline() {
+                status = Status.DECLINED
+        }
 }

@@ -1,7 +1,6 @@
 package com.victor.skainet.services
 
 import com.victor.skainet.dataclasses.Trip
-import com.victor.skainet.repositories.InMemoryTripRepository
 import com.victor.skainet.repositories.TripRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -20,33 +19,30 @@ class TripService(
         return repository.findAll()
     }
 
-    fun findTripsNotDrivenBy(userId : UUID) : Iterable<Trip> {
+    fun findTripsNotDrivenBy(userId: UUID) : Iterable<Trip> {
         return repository.findAllExcludingDriverId(userId)
     }
 
-    fun findForUser(userId : UUID) : Iterable<Trip> {
+    fun findTripsDrivenBy(userId: UUID) : Iterable<Trip> {
         return repository.findAllByDriverId(userId)
     }
 
-    fun addTrip(trip : Trip) {
+    fun addTrip(trip: Trip) {
         repository.save(trip)
     }
 
-    fun deleteTrip(tripId : UUID) : Trip? {
+    fun deleteTrip(tripId: UUID) : Trip? {
         val deletedTrip = repository.findById(tripId)
         repository.deleteById(tripId)
 
         return deletedTrip.orElse(null)
     }
 
-    fun getTrip(tripId : UUID) : Trip? {
+    fun getTrip(tripId: UUID) : Trip? {
         return repository.findById(tripId).orElse(null)
     }
 
-    fun updateTrip(trip : Trip) : Trip {
-        deleteTrip(trip.id)
-        addTrip(trip)
-
-        return trip
+    fun updateTrip(trip: Trip) {
+        repository.save(trip)
     }
 }
