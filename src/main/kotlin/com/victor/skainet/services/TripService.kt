@@ -1,7 +1,6 @@
 package com.victor.skainet.services
 
 import com.victor.skainet.dataclasses.Trip
-import com.victor.skainet.repositories.InMemoryTripRepository
 import com.victor.skainet.repositories.TripRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -1,6 +1,8 @@
 package com.victor.skainet.controllers
 
 import com.victor.skainet.dataclasses.Trip
+import com.victor.skainet.dataclasses.User
+import com.victor.skainet.services.ParticipationService
 import com.victor.skainet.services.TripService
 import com.victor.skainet.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +15,8 @@ import java.util.*
 @RestController
 class TripController (
         @Autowired val tripService: TripService,
-        @Autowired val userService: UserService
+        @Autowired val userService: UserService,
+        @Autowired val participationService: ParticipationService
 ) {
 
     @GetMapping(path = ["/trips"])
@@ -47,6 +50,11 @@ class TripController (
         if (trip != null)
             return ResponseEntity(trip, HttpStatus.OK)
         return ResponseEntity(HttpStatus.NOT_FOUND)
+    }
+
+    @GetMapping(path = ["/trips/{tripId}/participants"])
+    fun getTripParticipants(@PathVariable tripId: UUID) : Iterable<User> {
+        return participationService.getParticipantsForTrip(tripId)
     }
 
     @DeleteMapping(path = ["/trips/{tripId}"])

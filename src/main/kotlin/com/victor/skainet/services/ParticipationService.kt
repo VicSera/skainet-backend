@@ -16,9 +16,6 @@ class ParticipationService(
     fun addParticipation(user: User, trip: Trip) {
         val participation = Participation(user, trip)
 
-//        user.addParticipation(participation)
-//        trip.addParticipation(participation)
-
         repository.save(participation)
     }
 
@@ -54,5 +51,9 @@ class ParticipationService(
 
         repository.delete(participation)
         return true
+    }
+
+    fun getParticipantsForTrip(tripId: UUID) : Iterable<User> {
+        return repository.findAllParticipants(tripId)
     }
 }

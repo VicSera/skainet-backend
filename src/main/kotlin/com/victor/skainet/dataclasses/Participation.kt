@@ -20,7 +20,9 @@ data class Participation(
         val key: ParticipationKey = ParticipationKey(user.id, trip.id)
 
         @Column
+        @Enumerated(EnumType.STRING)
         var status: Status = Status.WAITING
+                private set
 
         fun accept() {
                 status = Status.ACCEPTED
