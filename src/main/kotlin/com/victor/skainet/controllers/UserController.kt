@@ -5,14 +5,10 @@ import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.dataclasses.Trip
 import com.victor.skainet.dataclasses.User
 import com.victor.skainet.services.ParticipationService
-import com.victor.skainet.services.TripService
 import com.victor.skainet.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
