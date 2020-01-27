@@ -1,9 +1,6 @@
 package com.victor.skainet.services
 
-import com.victor.skainet.dataclasses.Participation
-import com.victor.skainet.dataclasses.ParticipationKey
-import com.victor.skainet.dataclasses.Trip
-import com.victor.skainet.dataclasses.User
+import com.victor.skainet.dataclasses.*
 import com.victor.skainet.repositories.ParticipationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -53,7 +50,11 @@ class ParticipationService(
         return true
     }
 
-    fun getParticipantsForTrip(tripId: UUID) : Iterable<User> {
-        return repository.findAllParticipants(tripId)
+    fun getUsersWithStatus(tripId: UUID, status: Status) : Iterable<User> {
+        return repository.findAllUsersWithStatus(tripId, status)
+    }
+
+    fun getTripsWithStatus(userId: UUID, status: Status) : Iterable<Trip> {
+        return repository.findAllTripsWithStatus(userId, status)
     }
 }

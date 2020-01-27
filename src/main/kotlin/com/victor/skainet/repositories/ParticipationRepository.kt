@@ -15,21 +15,10 @@ interface ParticipationRepository : CrudRepository<Participation, ParticipationK
     @Query(value = "select part from Participation part where part.key.tripId = :tripId ")
     fun findAllByTripId(tripId : UUID) : List<Participation>
 
-    @Query(value = "select part.user from Participation part where part.key.tripId = :tripId and part.status = 'ACCEPTED'")
-    fun findAllParticipants(tripId: UUID): Iterable<User>
+    @Query(value = "select part.user from Participation part where part.key.tripId = :tripId and part.status = :status")
+    fun findAllUsersWithStatus(tripId: UUID, status: Status) : Iterable<User>
 
-    @Query(value = "select part.user from Participation part where part.key.tripId = :tripId and part.status = 'WAITING'")
-    fun findAllWaitingUsers(tripId: UUID) : Iterable<User>
+    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = :status")
+    fun findAllTripsWithStatus(userId: UUID, status: Status) : Iterable<Trip>
 
-    @Query(value = "select part.user from Participation part where part.key.tripId = :tripId and part.status = 'DECLINED'")
-    fun findAllDeclinedUsers(tripId: UUID) : Iterable<User>
-
-    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'ACCEPTED'")
-    fun findAllAcceptedTrips(userId: UUID) : Iterable<Trip>
-
-    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'WAITING'")
-    fun findAllWaitingTrips(userId: UUID) : Iterable<Trip>
-
-    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'DECLINED'")
-    fun findAllDeclinedTrips(userId: UUID) : Iterable<Trip>
 }
