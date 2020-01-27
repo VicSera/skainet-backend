@@ -1,5 +1,6 @@
 package com.victor.skainet.controllers
 
+import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.dataclasses.Trip
 import com.victor.skainet.dataclasses.User
 import com.victor.skainet.services.ParticipationService
@@ -54,7 +55,17 @@ class TripController (
 
     @GetMapping(path = ["/trips/{tripId}/participants"])
     fun getTripParticipants(@PathVariable tripId: UUID) : Iterable<User> {
-        return participationService.getParticipantsForTrip(tripId)
+        return participationService.getUsersWithStatus(tripId, Status.ACCEPTED)
+    }
+
+    @GetMapping(path = ["/trips/{tripId}/declined"])
+    fun getDeclinedUsers(@PathVariable tripId: UUID) : Iterable<User> {
+        return participationService.getUsersWithStatus(tripId, Status.DECLINED)
+    }
+
+    @GetMapping(path = ["/trips/{tripId}/waiting"])
+    fun getWaitingUsers(@PathVariable tripId: UUID) : Iterable<User> {
+        return participationService.getUsersWithStatus(tripId, Status.WAITING)
     }
 
     @DeleteMapping(path = ["/trips/{tripId}"])

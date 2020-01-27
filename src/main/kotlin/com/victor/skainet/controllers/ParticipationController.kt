@@ -1,6 +1,7 @@
 package com.victor.skainet.controllers
 
 import com.victor.skainet.dataclasses.Participation
+import com.victor.skainet.dataclasses.ParticipationKey
 import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.services.ParticipationService
 import com.victor.skainet.services.TripService
@@ -14,24 +15,19 @@ import java.util.*
 @CrossOrigin(origins = ["http://localhost:4200"], allowCredentials = "true")
 @RestController
 class ParticipationController (
-        @Autowired
-        val participationService: ParticipationService,
-
-        @Autowired
-        val userService: UserService,
-
-        @Autowired
-        val tripService: TripService
+        @Autowired val participationService: ParticipationService,
+        @Autowired val userService: UserService,
+        @Autowired val tripService: TripService
 ) {
-    @PostMapping(path = ["/participations/{userId}/{tripId}"])
-    fun addParticipation(@PathVariable userId : UUID, @PathVariable tripId : UUID) : ResponseEntity<Void> {
-        val user = userService.getUser(userId)
-        val trip = tripService.getTrip(tripId)
+    @PostMapping(path = ["/participations"])
+    fun addParticipation(@RequestBody participationKey: ParticipationKey) : ResponseEntity<Void> {
+        val user = userService.getUser(participationKey.userId)
+        val trip = tripService.getTrip(participationKey.tripId)
 
         if (user == null || trip == null)
             return ResponseEntity(HttpStatus.NOT_FOUND)
 
-        if (participationService.getParticipation(userId, tripId) != null)
+        if (participationService.getParticipation(participationKey.userId, participationKey.tripId) != null)
             return ResponseEntity(HttpStatus.CONFLICT)
 
         participationService.addParticipation(user, trip)
