@@ -25,35 +25,30 @@ class TripController (
         return tripService.findAll()
     }
 
-    @GetMapping(path = ["/users/{username}/trips"])
-    fun getAllTripsForUser(@PathVariable username : String) : Iterable<Trip>? {
-        val userId : UUID? = userService.getIdFromUsername(username)
+    @GetMapping(path = ["/users/{userId}/trips"])
+    fun getAllTripsForUser(@PathVariable userId : UUID) : ResponseEntity<Iterable<Trip>> {
+        userService.getUser(userId) ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
-        if (userId != null)
-            return tripService.findForUser(userId)
-
-        return null
+        return ResponseEntity(tripService.findTripsDrivenBy(userId), HttpStatus.OK)
     }
 
     @GetMapping(path = ["/users/{username}/other-trips"])
-    fun getAllTripsNotDrivenByUser(@PathVariable username : String) : Iterable<Trip>? {
-        val userId : UUID? = userService.getIdFromUsername(username)
+    fun getAllTripsNotDrivenByUser(@PathVariable username : String) : ResponseEntity<Iterable<Trip>> {
+        val userId = userService.getIdFromUsername(username)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
-        if (userId != null)
-            return tripService.findTripsNotDrivenBy(userId)
-
-        return null
+        return ResponseEntity(tripService.findTripsNotDrivenBy(userId), HttpStatus.OK)
     }
 
     @GetMapping(path = ["/trips/{tripId}"])
     fun getTripById(@PathVariable tripId: UUID) : ResponseEntity<Trip> {
         val trip = tripService.getTrip(tripId)
-        if (trip != null)
-            return ResponseEntity(trip, HttpStatus.OK)
-        return ResponseEntity(HttpStatus.NOT_FOUND)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        return ResponseEntity(trip, HttpStatus.OK)
     }
 
-    @GetMapping(path = ["/trips/{tripId}/participants"])
+    @GetMapping(path = ["/trips/{tripId}/accepted"])
     fun getTripParticipants(@PathVariable tripId: UUID) : Iterable<User> {
         return participationService.getUsersWithStatus(tripId, Status.ACCEPTED)
     }
@@ -70,20 +65,19 @@ class TripController (
 
     @DeleteMapping(path = ["/trips/{tripId}"])
     fun deleteTripById(@PathVariable tripId: UUID) : ResponseEntity<Void> {
-        val deletedTrip : Trip? = tripService.deleteTrip(tripId)
+        tripService.getTrip(tripId)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
-        if (deletedTrip != null) {
-            return ResponseEntity(HttpStatus.OK)
-//            return ResponseEntity.noContent().build()
-        }
-        return ResponseEntity.notFound().build()
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @PutMapping(path = ["/trips/{tripId}"])
-    fun updateTrip(@PathVariable tripId: UUID, @RequestBody trip : Trip) : ResponseEntity<Trip> {
-        tripService.updateTrip(trip)
+    fun updateTrip(@PathVariable tripId: UUID, @RequestBody trip : Trip) : ResponseEntity<Void> {
+        if (tripId != trip.id)
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
 
-        return ResponseEntity(trip, HttpStatus.OK)
+        tripService.updateTrip(trip)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @PostMapping(path = ["/trips"])

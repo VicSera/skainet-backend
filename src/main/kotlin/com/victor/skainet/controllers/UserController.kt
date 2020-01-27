@@ -24,16 +24,15 @@ class UserController @Autowired constructor(
 ){
     @GetMapping(path = ["/users"])
     fun getAllUsers() : Iterable<User> {
-        println(userService.getAllUsers())
         return userService.getAllUsers()
     }
 
     @GetMapping(path = ["/users/{userId}"])
     fun getUser(@PathVariable userId : UUID) : ResponseEntity<User> {
         val user = userService.getUser(userId)
-        if (user != null)
-            return ResponseEntity(user, HttpStatus.OK)
-        return ResponseEntity(HttpStatus.NOT_FOUND)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        return ResponseEntity(user, HttpStatus.OK)
     }
 
     @GetMapping(path = ["/users/byusername/{username}"])

@@ -42,16 +42,6 @@ class ParticipationController (
         return ResponseEntity(participation.status, HttpStatus.OK)
     }
 
-    @GetMapping(path = ["/participations/by-user/{userId}"])
-    fun getUserParticipationList(@PathVariable userId: UUID) : Iterable<Participation> {
-        return participationService.getForUser(userId)
-    }
-
-    @GetMapping(path = ["/participations/by-trip/{tripId}"])
-    fun getTripParticipationList(@PathVariable tripId: UUID) : Iterable<Participation> {
-        return participationService.getForTrip(tripId)
-    }
-
     @PutMapping(path = ["/participations/{userId}/{tripId}/accept"])
     fun acceptParticipation(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Void> {
         val participation = participationService.getParticipation(userId, tripId)
