@@ -1,6 +1,5 @@
 package com.victor.skainet.controllers
 
-import com.victor.skainet.dataclasses.Participation
 import com.victor.skainet.dataclasses.ParticipationKey
 import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.services.ParticipationService

@@ -5,21 +5,17 @@ import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.dataclasses.Trip
 import com.victor.skainet.dataclasses.User
 import com.victor.skainet.services.ParticipationService
-import com.victor.skainet.services.TripService
 import com.victor.skainet.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import kotlin.NoSuchElementException
 
 @CrossOrigin(origins = ["http://localhost:4200"], allowCredentials = "true")
 @RestController
 class UserController @Autowired constructor(
         val userService: UserService,
-        val tripService: TripService,
         val participationService: ParticipationService
 ){
     @GetMapping(path = ["/users"])
@@ -67,12 +63,9 @@ class UserController @Autowired constructor(
         val username = authenticationInfo.username
         val password = authenticationInfo.password
 
-        try {
-            val user: User = userService.authenticate(username, password)
-            return ResponseEntity(user, HttpStatus.ACCEPTED)
-        }
-        catch (excp : BadCredentialsException) {
-            return ResponseEntity(HttpStatus.UNAUTHORIZED)
-        }
+        val user = userService.authenticate(username, password)
+                ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+
+        return ResponseEntity(user, HttpStatus.ACCEPTED)
     }
 }
