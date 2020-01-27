@@ -26,4 +26,10 @@ interface ParticipationRepository : CrudRepository<Participation, ParticipationK
 
     @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'ACCEPTED'")
     fun findAllAcceptedTrips(userId: UUID) : Iterable<Trip>
+
+    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'WAITING'")
+    fun findAllWaitingTrips(userId: UUID) : Iterable<Trip>
+
+    @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = 'DECLINED'")
+    fun findAllDeclinedTrips(userId: UUID) : Iterable<Trip>
 }
