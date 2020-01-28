@@ -31,7 +31,7 @@ data class Trip(
         )
         val id: UUID = UUID.randomUUID()
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
         var driver: User? = User()
 
 //        @OneToMany(

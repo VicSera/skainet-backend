@@ -5,12 +5,12 @@ import javax.persistence.*
 @Entity
 @Table(name = "participation")
 data class Participation(
-        @ManyToOne
+        @ManyToOne(cascade = [CascadeType.ALL])
         @MapsId("user_id")
         @JoinColumn(name = "user_id")
         val user: User = User(),
 
-        @ManyToOne
+        @ManyToOne(cascade = [CascadeType.ALL])
         @MapsId("trip_id")
         @JoinColumn(name = "trip_id")
         val trip: Trip = Trip()
