@@ -52,10 +52,10 @@ class UserController @Autowired constructor(
     }
 
     @PostMapping(path = ["/users"])
-    fun addUser(@RequestBody user : User) : ResponseEntity<User> {
+    fun addUser(@RequestBody user : User) : ResponseEntity<Void> {
         userService.addUser(user)
 
-        return ResponseEntity(user, HttpStatus.OK)
+        return ResponseEntity( HttpStatus.OK)
     }
 
     @PostMapping(path = ["/authenticate"])

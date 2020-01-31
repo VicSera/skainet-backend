@@ -34,13 +34,4 @@ data class User (
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
         val id: UUID = UUID.randomUUID()
-
-//        @OneToMany(
-//                mappedBy = "user"
-//        )
-//        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
-//
-//        fun addParticipation(participation: Participation) {
-//                participationList.add(participation)
-//        }
 }

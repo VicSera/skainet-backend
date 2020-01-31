@@ -81,9 +81,14 @@ class TripController (
     }
 
     @PostMapping(path = ["/trips"])
-    fun addTrip(@RequestBody trip : Trip) : ResponseEntity<Trip> {
+    fun addTrip(@RequestBody trip : Trip) : ResponseEntity<Void> {
+        val user = userService.getUser(trip.driver!!.id)
+                ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
+
+        trip.driver = user
+
         tripService.addTrip(trip)
 
-        return ResponseEntity(trip, HttpStatus.OK)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
