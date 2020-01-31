@@ -23,7 +23,7 @@ data class User (
         var phoneNumber: String = "",
 
         @Column(nullable = true)
-        var usualLocation: String = ""
+        var home: String = ""
         ) {
 
         @Id

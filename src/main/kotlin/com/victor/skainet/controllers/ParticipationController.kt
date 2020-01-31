@@ -1,5 +1,6 @@
 package com.victor.skainet.controllers
 
+import com.victor.skainet.ParticipationException
 import com.victor.skainet.dataclasses.ParticipationKey
 import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.services.ParticipationService
@@ -29,7 +30,12 @@ class ParticipationController (
         if (participationService.getParticipation(participationKey.userId, participationKey.tripId) != null)
             return ResponseEntity(HttpStatus.CONFLICT)
 
-        participationService.addParticipation(user, trip)
+        try {
+            participationService.addParticipation(user, trip)
+        } catch (excp: ParticipationException) {
+            return ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
+        }
+
         return ResponseEntity(HttpStatus.OK)
     }
 

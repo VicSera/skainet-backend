@@ -1,5 +1,6 @@
 package com.victor.skainet.services
 
+import com.victor.skainet.ParticipationException
 import com.victor.skainet.dataclasses.*
 import com.victor.skainet.repositories.ParticipationRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +13,12 @@ class ParticipationService(
 ) {
     fun addParticipation(user: User, trip: Trip) {
         val participation = Participation(user, trip)
+
+        if (trip.remainingSeats < 1) {
+            throw ParticipationException()
+        }
+
+        trip.remainingSeats -= 1
 
         repository.save(participation)
     }
@@ -46,6 +53,7 @@ class ParticipationService(
         val participation = repository.findById(ParticipationKey(userId, tripId)).orElse(null)
                 ?: return false
 
+        participation.trip.remainingSeats += 1
         repository.delete(participation)
         return true
     }
