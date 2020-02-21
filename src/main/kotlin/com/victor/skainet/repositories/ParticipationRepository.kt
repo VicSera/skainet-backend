@@ -21,4 +21,12 @@ interface ParticipationRepository : CrudRepository<Participation, ParticipationK
     @Query(value = "select part.trip from Participation part where part.key.userId = :userId and part.status = :status")
     fun findAllTripsWithStatus(userId: UUID, status: Status) : Iterable<Trip>
 
+    @Query(value = "select part from Participation part where part.trip.driver.id = :userId")
+    fun findAllRequestsForUserId(userId: UUID): Iterable<Participation>
+
+    @Query(value = "select count(part) from Participation part where part.trip.id = :tripId and part.status = :status")
+    fun countTripParticipationsByStatus(tripId: UUID, status: Status): Int
+
+    @Query(value = "select part from Participation part where part.user.id = :userId")
+    fun findAllRequestsByUserId(userId: UUID): Iterable<Participation>
 }

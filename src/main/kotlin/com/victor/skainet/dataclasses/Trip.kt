@@ -1,27 +1,13 @@
 package com.victor.skainet.dataclasses
 
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "trip")
-data class Trip(
-        @Column(nullable = false)
-        var date: Date = Date(),
-
-        @Column(nullable = false)
-        var maxPassengers: Int = 0,
-
-        @Column(nullable = false)
-        var location: String = "",
-
-        @Column(nullable = true)
-        var comment: String = "",
-
-        @Column(nullable = false)
-        var go: Boolean = true
-) {
+data class Trip (
         @Id
         @Column(length = 16)
         @GeneratedValue(generator = "UUID")
@@ -29,27 +15,28 @@ data class Trip(
                 name = "UUID",
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
-        val id: UUID = UUID.randomUUID()
+        val id: UUID = UUID.randomUUID(),
 
-        @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-        var driver: User? = User()
+        @ManyToOne(fetch = FetchType.LAZY)
+        var driver: User? = User(),
 
-//        @OneToMany(
-//                mappedBy = "trip"
-//        )
-//        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
-//
-//        fun addParticipation(participation: Participation) {
-//                participationList.add(participation)
-//        }
+        @Column(nullable = false)
+        var dateTime: LocalDateTime = LocalDateTime.now(),
 
-//        override fun equals(other: Any?): Boolean {
-//                if (other is Trip)
-//                        return other.id == this.id
-//                return false
-//        }
-//
-//        override fun hashCode(): Int {
-//                return 31
-//        }
-}
+        @Column(nullable = false)
+        var maxPassengers: Int = 0,
+
+        @Column(nullable=false)
+        var remainingSeats: Int = 0,
+
+        @Column(nullable = false)
+        var startingLocation: String = "",
+
+        @Column(nullable = false)
+        var destination: String = "",
+
+        @Column(nullable = true)
+        var comment: String = ""
+)
+
+

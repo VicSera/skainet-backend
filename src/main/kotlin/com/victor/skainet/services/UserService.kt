@@ -12,10 +12,6 @@ import java.util.*
 class UserService @Autowired constructor(
         private val repository : UserRepository
 ) {
-    init {
-        println(repository.findAll())
-    }
-
     fun addUser(user : User) {
         user.password = BCryptPasswordEncoder().encode(user.password)
 

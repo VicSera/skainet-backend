@@ -1,9 +1,6 @@
 package com.victor.skainet.controllers
 
-import com.victor.skainet.dataclasses.AuthenticationInfo
-import com.victor.skainet.dataclasses.Status
-import com.victor.skainet.dataclasses.Trip
-import com.victor.skainet.dataclasses.User
+import com.victor.skainet.dataclasses.*
 import com.victor.skainet.services.ParticipationService
 import com.victor.skainet.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +33,16 @@ class UserController @Autowired constructor(
         return userService.getFromUsername(username)
     }
 
+    @GetMapping(path = ["/users/{userId}/in-requests"])
+    fun getIncomingRequests(@PathVariable userId: UUID) : Iterable<Participation> {
+        return participationService.getParticipationRequestsFor(userId)
+    }
+
+    @GetMapping(path = ["/users/{userId}/out-requests"])
+    fun getRequests(@PathVariable userId: UUID) : Iterable<Participation> {
+        return participationService.getParticipationRequestsBy(userId)
+    }
+
     @GetMapping(path = ["/users/{userId}/accepted"])
     fun getAcceptedTrips(@PathVariable userId: UUID) : Iterable<Trip> {
         return participationService.getTripsWithStatus(userId, Status.ACCEPTED)
@@ -52,10 +59,10 @@ class UserController @Autowired constructor(
     }
 
     @PostMapping(path = ["/users"])
-    fun addUser(@RequestBody user : User) : ResponseEntity<User> {
+    fun addUser(@RequestBody user : User) : ResponseEntity<Void> {
         userService.addUser(user)
 
-        return ResponseEntity(user, HttpStatus.OK)
+        return ResponseEntity( HttpStatus.OK)
     }
 
     @PostMapping(path = ["/authenticate"])

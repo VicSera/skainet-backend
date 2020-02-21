@@ -23,7 +23,10 @@ data class User (
         var phoneNumber: String = "",
 
         @Column(nullable = true)
-        var usualLocation: String = ""
+        var home: String? = null,
+
+        @Column(nullable = true)
+        var carSeats: Int? = null
         ) {
 
         @Id
@@ -34,13 +37,4 @@ data class User (
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
         val id: UUID = UUID.randomUUID()
-
-//        @OneToMany(
-//                mappedBy = "user"
-//        )
-//        val participationList: MutableList<Participation> = emptyList<Participation>().toMutableList()
-//
-//        fun addParticipation(participation: Participation) {
-//                participationList.add(participation)
-//        }
 }

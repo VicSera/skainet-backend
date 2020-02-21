@@ -1,7 +1,9 @@
 package com.victor.skainet.services
 
+import com.victor.skainet.ParticipationException
 import com.victor.skainet.dataclasses.*
 import com.victor.skainet.repositories.ParticipationRepository
+import com.victor.skainet.repositories.TripRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -33,6 +35,10 @@ class ParticipationService(
     fun acceptParticipation(participation: Participation) {
         participation.accept()
 
+        if (participation.trip.remainingSeats < 1) {
+            throw ParticipationException()
+        }
+
         repository.save(participation)
     }
 
@@ -56,5 +62,13 @@ class ParticipationService(
 
     fun getTripsWithStatus(userId: UUID, status: Status) : Iterable<Trip> {
         return repository.findAllTripsWithStatus(userId, status)
+    }
+
+    fun getParticipationRequestsBy(userId: UUID): Iterable<Participation> {
+        return repository.findAllRequestsByUserId(userId)
+    }
+
+    fun getParticipationRequestsFor(userId: UUID): Iterable<Participation> {
+        return repository.findAllRequestsForUserId(userId)
     }
 }

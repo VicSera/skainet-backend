@@ -1,5 +1,6 @@
 package com.victor.skainet.controllers
 
+import com.victor.skainet.ParticipationException
 import com.victor.skainet.dataclasses.ParticipationKey
 import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.services.ParticipationService
@@ -29,7 +30,12 @@ class ParticipationController (
         if (participationService.getParticipation(participationKey.userId, participationKey.tripId) != null)
             return ResponseEntity(HttpStatus.CONFLICT)
 
-        participationService.addParticipation(user, trip)
+        try {
+            participationService.addParticipation(user, trip)
+        } catch (excp: ParticipationException) {
+            return ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
+        }
+
         return ResponseEntity(HttpStatus.OK)
     }
 
@@ -47,6 +53,7 @@ class ParticipationController (
                 ?: return ResponseEntity(HttpStatus.NOT_FOUND)  // if participation not found, return 404
 
         participationService.acceptParticipation(participation)
+        tripService.refreshRemainingSeats(participation.trip)
         return ResponseEntity(HttpStatus.OK)
     }
 
@@ -56,6 +63,7 @@ class ParticipationController (
                 ?: return ResponseEntity(HttpStatus.NOT_FOUND)  // if participation not found, return 404
 
         participationService.declineParticipation(participation)
+        tripService.refreshRemainingSeats(participation.trip)
         return ResponseEntity(HttpStatus.OK)
     }
 
@@ -63,6 +71,10 @@ class ParticipationController (
     fun deleteParticipation(@PathVariable userId: UUID, @PathVariable tripId: UUID) : ResponseEntity<Void> {
         if (participationService.deleteParticipation(userId, tripId))
             return ResponseEntity(HttpStatus.NO_CONTENT)
+
+        val trip = tripService.getTrip(tripId)
+                ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        tripService.refreshRemainingSeats(trip)
 
         return ResponseEntity(HttpStatus.NOT_FOUND)
     }

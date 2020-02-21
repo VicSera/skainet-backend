@@ -1,5 +1,6 @@
 package com.victor.skainet.controllers
 
+import com.victor.skainet.dataclasses.Participation
 import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.dataclasses.Trip
 import com.victor.skainet.dataclasses.User
@@ -63,10 +64,25 @@ class TripController (
         return participationService.getUsersWithStatus(tripId, Status.WAITING)
     }
 
+    @GetMapping(path = ["/trips/{tripId}/requests"])
+    fun getAllRequests(@PathVariable tripId: UUID): Map<String, Iterable<User>> {
+        val accepted = participationService.getUsersWithStatus(tripId, Status.ACCEPTED)
+        val declined = participationService.getUsersWithStatus(tripId, Status.DECLINED)
+        val waiting = participationService.getUsersWithStatus(tripId, Status.WAITING)
+
+        return mapOf(
+                "accepted" to accepted,
+                "declined" to declined,
+                "waiting" to waiting
+        )
+    }
+
     @DeleteMapping(path = ["/trips/{tripId}"])
     fun deleteTripById(@PathVariable tripId: UUID) : ResponseEntity<Void> {
         tripService.getTrip(tripId)
                 ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        tripService.deleteTrip(tripId)
 
         return ResponseEntity(HttpStatus.OK)
     }
@@ -81,9 +97,14 @@ class TripController (
     }
 
     @PostMapping(path = ["/trips"])
-    fun addTrip(@RequestBody trip : Trip) : ResponseEntity<Trip> {
+    fun addTrip(@RequestBody trip : Trip) : ResponseEntity<Void> {
+        val user = userService.getUser(trip.driver!!.id)
+                ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
+
+        trip.driver = user
+
         tripService.addTrip(trip)
 
-        return ResponseEntity(trip, HttpStatus.OK)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
