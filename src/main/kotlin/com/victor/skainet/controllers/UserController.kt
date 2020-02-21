@@ -1,9 +1,6 @@
 package com.victor.skainet.controllers
 
-import com.victor.skainet.dataclasses.AuthenticationInfo
-import com.victor.skainet.dataclasses.Status
-import com.victor.skainet.dataclasses.Trip
-import com.victor.skainet.dataclasses.User
+import com.victor.skainet.dataclasses.*
 import com.victor.skainet.services.ParticipationService
 import com.victor.skainet.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,6 +31,16 @@ class UserController @Autowired constructor(
     @GetMapping(path = ["/users/byusername/{username}"])
     fun getUserByUsername(@PathVariable username : String) : User? {
         return userService.getFromUsername(username)
+    }
+
+    @GetMapping(path = ["/users/{userId}/in-requests"])
+    fun getIncomingRequests(@PathVariable userId: UUID) : Iterable<Participation> {
+        return participationService.getParticipationRequestsFor(userId)
+    }
+
+    @GetMapping(path = ["/users/{userId}/out-requests"])
+    fun getRequests(@PathVariable userId: UUID) : Iterable<Participation> {
+        return participationService.getParticipationRequestsBy(userId)
     }
 
     @GetMapping(path = ["/users/{userId}/accepted"])

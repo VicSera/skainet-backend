@@ -1,7 +1,14 @@
 version: "3"
 services:
+  frontend:
+    image: vicsera/skainet:frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - 4200:80
   backend:
-    image: skainet-backend
+    image: vicsera/skainet:backend
     container_name: backend
     depends_on:
       - db
@@ -10,26 +17,16 @@ services:
       MYSQL_USER: victor
       MYSQL_PASSWORD: 123
     ports:
-      - 8086:8086
+      - 8080:8080
   db:
     image: mariadb
     container_name: database
     ports:
-      - 6033:3306
-#    volumes:
-#      - /home/docker/data:/data
+      - 3306:3306
+    volumes:
+      - /home/docker/data:/data
     environment:
       MYSQL_ROOT_PASSWORD: 123
       MYSQL_DATABASE: skainet
       MYSQL_USER: victor
       MYSQL_PASSWORD: 123
-  visualizer:
-    image: dockersamples/visualizer:stable
-    container_name: visualizer
-    ports:
-      - 8080:8080
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]

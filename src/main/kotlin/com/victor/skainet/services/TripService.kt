@@ -1,6 +1,8 @@
 package com.victor.skainet.services
 
+import com.victor.skainet.dataclasses.Status
 import com.victor.skainet.dataclasses.Trip
+import com.victor.skainet.repositories.ParticipationRepository
 import com.victor.skainet.repositories.TripRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -9,12 +11,9 @@ import kotlin.NoSuchElementException
 
 @Service
 class TripService(
-        @Autowired private val repository : TripRepository
+        @Autowired private val repository : TripRepository,
+        @Autowired private val participationRepository: ParticipationRepository
 ) {
-    init {
-        println(repository.findAll())
-    }
-
     fun findAll() : Iterable<Trip> {
         return repository.findAll()
     }
@@ -28,6 +27,8 @@ class TripService(
     }
 
     fun addTrip(trip: Trip) {
+        trip.remainingSeats = trip.maxPassengers
+
         repository.save(trip)
     }
 
@@ -43,6 +44,13 @@ class TripService(
     }
 
     fun updateTrip(trip: Trip) {
+        repository.save(trip)
+    }
+
+    fun refreshRemainingSeats(trip: Trip) {
+        trip.remainingSeats = trip.maxPassengers - participationRepository.countTripParticipationsByStatus(
+                tripId = trip.id, status = Status.ACCEPTED
+        )
         repository.save(trip)
     }
 }

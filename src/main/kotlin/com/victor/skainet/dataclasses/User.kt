@@ -23,7 +23,10 @@ data class User (
         var phoneNumber: String = "",
 
         @Column(nullable = true)
-        var home: String = ""
+        var home: String? = null,
+
+        @Column(nullable = true)
+        var carSeats: Int? = null
         ) {
 
         @Id

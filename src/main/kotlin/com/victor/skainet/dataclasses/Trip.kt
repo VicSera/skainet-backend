@@ -17,7 +17,7 @@ data class Trip (
         )
         val id: UUID = UUID.randomUUID(),
 
-        @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+        @ManyToOne(fetch = FetchType.LAZY)
         var driver: User? = User(),
 
         @Column(nullable = false)
@@ -27,7 +27,7 @@ data class Trip (
         var maxPassengers: Int = 0,
 
         @Column(nullable=false)
-        var remainingSeats: Int = maxPassengers,
+        var remainingSeats: Int = 0,
 
         @Column(nullable = false)
         var startingLocation: String = "",
